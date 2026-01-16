@@ -129,3 +129,19 @@ function renderSummary() {
     balanceTotalEl.textContent = formatLKR(balance);
 }
 
+// ACTIONS
+function addTransaction(tx) {
+    transactions.push(tx);
+    render();
+}
+
+function deleteTransaction(id) {
+    transactions = transactions.filter((t) => t.id !== id);
+    render();
+}
+
+function clearAll() {
+    transactions = [];
+    render();
+}
+
