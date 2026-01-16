@@ -52,3 +52,49 @@ function loadFromStorage() {
     }
 }
 
+// RENDER
+function render() {
+    renderTransactions();
+    renderSummary();
+    saveToStorage();
+}
+
+function renderTransactions() {
+    txListEl.innerHTML = "";
+
+    if (transactions.length === 0) {
+        emptyStateEl.style.display = "block";
+        return;
+    }
+
+    emptyStateEl.style.display = "none";
+
+    //show latest first
+    const sorted = [...transactions].sort((a,b) => (b.date || "").localCompare(a.date || ""));
+
+    for (const tx of sorted) {
+        const item = document.createElement("div");
+        item.className = "tx";
+
+        const badgeClass = tx.type === "income" ? "income" : "expense";
+        const sign = tx.type === "income" ? "+" : "-";
+
+        item.innerHTML = `
+        <div>
+            <div class="top">
+                <span class="badge ${badgeClass}">${tx.type.toUpperCase()}/</span>
+                <strong>${tx.category}</strong>
+                <span class="meta>${tx.date || ""}</span>
+            </div>
+            <div class="meta">${tx.note ? tx.note : ""}</div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:flex-end;">
+            <div class="amount>${sign} ${formatLKR(tx.amount)}</div>
+            <button class="smallBtn" data-id="${tx.id}" title="delete">Delete</button>
+        </div>
+        `;
+
+        txListEl.appendChild(item);
+    }
+}
