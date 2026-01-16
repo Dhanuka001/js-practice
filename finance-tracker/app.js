@@ -97,4 +97,16 @@ function renderTransactions() {
 
         txListEl.appendChild(item);
     }
+
+    //one event listner for all delete buttons
+    if (!txListEl.dataset.bound) {
+        txListEl.addEventListener("click", (e) => {
+            const btn = e.target.closet("button[data-id]");
+            if (!btn) return;
+            const id = btn.dataset.id;
+            deleteTransaction(id);
+        });
+
+        txListEl.dataset.bound = true;
+    }
 }
