@@ -1,7 +1,7 @@
 // DOM
 const txForm = document.querySelector("#txForm");
 const typeEl = document.querySelector("#type");
-const categoryEl = document.querySelector("#category");
+const categoryEl = document.querySelector("#Category");
 const amountEl = document.querySelector("#amount");
 const dateEl = document.querySelector("#date");
 const noteEl = document.querySelector("#note");
@@ -70,7 +70,7 @@ function renderTransactions() {
     emptyStateEl.style.display = "none";
 
     //show latest first
-    const sorted = [...transactions].sort((a,b) => (b.date || "").localCompare(a.date || ""));
+    const sorted = [...transactions].sort((a,b) => (b.date || "").localeCompare(a.date || ""));
 
     for (const tx of sorted) {
         const item = document.createElement("div");
@@ -80,18 +80,18 @@ function renderTransactions() {
         const sign = tx.type === "income" ? "+" : "-";
 
         item.innerHTML = `
-        <div>
+        <div">
             <div class="top">
-                <span class="badge ${badgeClass}">${tx.type.toUpperCase()}/</span>
+                <span class="badge ${badgeClass}">${tx.type.toUpperCase()}</span>
                 <strong>${tx.category}</strong>
-                <span class="meta>${tx.date || ""}</span>
+                <span class="meta">${tx.date || ""}</span>
             </div>
             <div class="meta">${tx.note ? tx.note : ""}</div>
         </div>
 
-        <div style="display:flex; align-items:center; justify-content:flex-end;">
-            <div class="amount>${sign} ${formatLKR(tx.amount)}</div>
-            <button class="smallBtn" data-id="${tx.id}" title="delete">Delete</button>
+        <div style="display:flex; align-items:center; justify-content:flex-end; gap:8px;">
+            <div class="amount">${sign} ${formatLKR(tx.amount)}</div>
+            <button class="smallBtn" data-id="${tx.id}" title="delete">🗑️</button>
         </div>
         `;
 
@@ -101,7 +101,7 @@ function renderTransactions() {
     //one event listner for all delete buttons
     if (!txListEl.dataset.bound) {
         txListEl.addEventListener("click", (e) => {
-            const btn = e.target.closet("button[data-id]");
+            const btn = e.target.closest("button[data-id]");
             if (!btn) return;
             const id = btn.dataset.id;
             deleteTransaction(id);
@@ -125,7 +125,7 @@ function renderSummary() {
     const balance = income - expense;
 
     incomeTotalEl.textContent = formatLKR(income);
-    emptyStateEl.textContent = formatLKR(expense);
+    expenseTotalEl.textContent = formatLKR(expense);
     balanceTotalEl.textContent = formatLKR(balance);
 }
 
@@ -145,3 +145,47 @@ function clearAll() {
     render();
 }
 
+// FORM HANDLER
+
+txForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    setError("");
+
+    const type = typeEl.value;
+    const category = categoryEl.value;
+    const amount = Number(amountEl.value);
+    const date = dateEl.value;
+    const note = noteEl.value.trim();
+
+    // validation
+    if (!type || !category ) return setError("Please select type and category.");
+    if (!Number.isFinite(amount) || amount <= 0) return setError("Amount must be greater than 0.");
+    if (!date) return setError("Please choose a date");
+
+    const tx = {
+        id: generateID(),
+        type,
+        category,
+        amount,
+        date,
+        note
+    };
+
+    addTransaction(tx);
+
+    //reset fields
+    amountEl.value = "";
+    noteEl.value = "";
+    dateEl.value = "";
+ });
+
+ //clear all
+ clearAllBtn.addEventListener("click", () => {
+    const ok = confirm("Clear all transactions?");
+    if (!ok) return;
+    clearAll();
+ });
+
+//  INIT
+transactions = loadFromStorage();
+render();
