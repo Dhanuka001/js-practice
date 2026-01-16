@@ -110,3 +110,22 @@ function renderTransactions() {
         txListEl.dataset.bound = true;
     }
 }
+
+
+function renderSummary() {
+    let income = 0;
+    let expense = 0;
+
+    for (const tx of transactions) {
+        const amt = Number(tx.amount) || 0;
+        if (tx.type == "income") income += amt;
+        else expense += amt;
+    }
+
+    const balance = income - expense;
+
+    incomeTotalEl.textContent = formatLKR(income);
+    emptyStateEl.textContent = formatLKR(expense);
+    balanceTotalEl.textContent = formatLKR(balance);
+}
+
