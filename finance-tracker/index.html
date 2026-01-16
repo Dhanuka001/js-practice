@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPENDWISE - Finance Tracker</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>Spend Wise</h1>
+            <p>Track Income & Expenses (saved in your browser)</p>
+        </header>
+        
+        <!-- Account summary -->
+        <section class="summary">
+            <div class="card">
+                <div class="label">Income</div>
+                <div id="incomeTotal" class="value">Rs 0</div>
+            </div>
+            <div class="card">
+                <div class="label">Expenses</div>
+                <div id="expenseTotal" class="value">Rs 0</div>
+            </div>
+            <div class="card">
+                <div class="label">Balance</div>
+                <div id="balanceTotal" class="value"> Rs 0</div>
+            </div>
+        </section>
+
+        <!-- Action panel -->
+         <section class="panel">
+            <h2>Add Transaction</h2>
+
+            <!-- Transation type selection -->
+            <form id="txForm" class="form">
+                <label>
+                    Type
+                    <select id="type">
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                </label>
+
+                <!-- Transaction category selection -->
+                <label>
+                    Category
+                    <select id="Category">
+                        <option value="Food">Food</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Bills"></option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </label>
+            </form>
+         </section>
+    </div>
+</body>
+</html>
