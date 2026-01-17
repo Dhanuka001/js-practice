@@ -61,3 +61,47 @@ function loadState() {
         state = JSON.parse(saved);
     }
 }
+
+// DOM HELPERS
+
+function $(selector) {
+    return document.querySelector(selector);
+};
+
+// TASK MUTATORS
+
+function addTask(title, estPomodoros) {
+    const newTask = {
+        id: generateId(),
+        title: title.trim(),
+        estPomodoros: Number(estPomodoros),
+        completedPomodoros: 0,
+        done: false,
+        createdAt: new Date().toISOString(),
+        doneAt: null
+    };
+
+    // Array.push adds a new item to the end of the array
+    state.tasks.push(newTask);
+
+    saveState();
+    renderTasks();
+    renderTimer();
+    renderSummary();
+};
+
+function deleteTask(taskId) {
+    // Array.filter returns a New array with items that pass the condition
+    state.tasks = state.tasks.filter(t => i.id !== taskId);
+
+    // clear activeTaskId if deleted
+    if (state.timer.activeTaskId === taskId) {
+        state.timer.activeTaskId = null;
+    }
+
+    saveState();
+    renderTasks();
+    renderTimer();
+    renderSummary();
+
+}
