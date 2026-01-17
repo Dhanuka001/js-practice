@@ -105,3 +105,23 @@ function deleteTask(taskId) {
     renderSummary();
 
 }
+
+function toggleTaskDone(taskId) {
+
+    const task = state.tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    task.done = !task.done;
+    task.doneAt = task.done ? new Date().toISOString(): null;
+
+    saveState();
+    renderTasks();
+    renderSummary();
+}
+ 
+function setActiveTask(taskId) {
+    state.timer.activeTaskId = taskId;
+    saveState();
+    renderTasks();
+    renderTimer();
+}
