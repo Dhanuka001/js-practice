@@ -48,3 +48,16 @@ function getLastDaysKeys() {
 
     return keys;
 }
+
+// PERSISTENCE (localStorage)
+
+function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        state = JSON.parse(saved);
+    }
+}
