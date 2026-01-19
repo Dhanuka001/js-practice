@@ -200,4 +200,33 @@ function onFocusComplete() {
     alert("Sprint complete! Pomodoro added to task.");
 }
 
+// HABIT MUTATORS
+
+function addHabit(title) {
+    const newHabit = {
+        id: generateId(),
+        title: title.trim(),
+        history: {}
+    }
+
+    state.habits.push(newHabit);
+
+    saveState();
+    renderTasks();
+    renderSummary();
+}
+
+
+function toggleHabitToday(habitId) {
+    const today = getTodayKey();
+    const habit = state.habits.find( h => h.id === habitId);
+    if (!habit) return;
+
+    const current = habit.history[today] === true;
+    habit.history[today] = !current;
+
+    saveState();
+    renderHabits();
+    renderSummary();
+}
 
