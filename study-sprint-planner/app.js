@@ -125,3 +125,52 @@ function setActiveTask(taskId) {
     renderTasks();
     renderTimer();
 }
+
+// TIMER LOGIC
+
+function startTimer() {
+    if(state.timer.running) return;
+
+    if(!state.timer.activeTaskId) {
+        alert("Select a task first!");
+        return;
+    }
+
+    state.timer.running = true;
+    saveState();
+    renderTimer();
+
+    intervalId = setInterval(() => {
+        state.timer.secondsLeft -= 1;
+
+        if( state.timer.secondsLeft <= 0) {
+            onFocusComplete();
+            return;
+        }
+
+        renderTimer();
+        saveState();
+    }, 1000);
+
+}
+
+function pauseTimer() {
+    if (intervalId) clearInterval(intervalId);
+    intervalId = null;
+
+    state.timer.running = false;
+    saveState();
+    renderTimer();
+}
+
+function resetTimer() {
+    if (intervalId) clearInterval(intervalId);
+    intervalId = null;
+
+    state.timer.running = false;
+    state.timer.secondsLeft = 1500;
+
+    saveState();
+    renderTimer();
+}
+
