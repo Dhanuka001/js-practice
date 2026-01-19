@@ -174,3 +174,30 @@ function resetTimer() {
     renderTimer();
 }
 
+function onFocusComplete() {
+    if (intervalId) clearInterval(intervalId);
+    intervalId = null;
+
+    state.timer.running = false;
+    state.timer.secondsLeft = 1500;
+
+    const taskId = state.timer.activeTaskId;
+    const task = state.tasks.find(t => t.id === taskId);
+
+    // Record the session for weekly summary
+    state.sessions.push({ dateKey: getTodayKey(), taskId});
+
+    // Update the task progress
+    if (task) {
+        task.completedPomodoros += 1;
+    }
+
+    saveState();
+    renderTasks();
+    renderTimer();
+    renderSummary();
+
+    alert("Sprint complete! Pomodoro added to task.");
+}
+
+
